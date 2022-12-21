@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  db-dogs:
+    image: postgres:14.1-alpine
+    restart: alwayscd
+    environment:
+      - POSTGRES_USER=devpg
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=dogs
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+  dogs-api:
+    environment:
+      VIRTUAL_HOST: api.dogs.mauriciosalazar.dev, www.api.dogs.mauriciosalazar.dev
+      LETSENCRYPT_HOST: api.dogs.mauriciosalazar.dev, www.api.dogs.mauriciosalazar.dev
+      LETSENCRYPT_EMAIL: maurisa2004@gmail.com
+      VIRTUAL_PORT: 3040
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 3040
+    ports:
+      - 3040:3040
+    container_name: dogs-api
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

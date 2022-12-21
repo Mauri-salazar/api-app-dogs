@@ -19,10 +19,11 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
+const { VIRTUAL_PORT } = process.env ; //puerto del server
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
-  server.listen(3004, () => {
-    console.log('%s listening at 3004'); // eslint-disable-line no-console
+  server.listen(VIRTUAL_PORT, () => {
+    console.log('%s listening at ',VIRTUAL_PORT); // eslint-disable-line no-console
   });
 });
